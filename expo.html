@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CloudSCADA Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+
+:root{
+  --red:#e60000;
+  --green:#16a34a;
+  --blue:#2563eb;
+  --dark:#0d0d0d;
+  --gray:#6b7280;
+  --light:#f5f5f5;
+  --border:rgba(0,0,0,0.08);
+  --white:#fff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#fafafa;
+  color:#111;
+}
+
+/* NAVBAR */
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:999;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+.nav-inner{
+  max-width:1200px;
+  margin:auto;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+}
+
+.logo span{
+  color:var(--red);
+}
+
+.device-pill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:100px;
+  background:#f0fdf4;
+  color:var(--green);
+  border:1px solid #bbf7d0;
+  font-size:12px;
+  font-weight:700;
+}
+
+.pulse{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1;}
+  50%{opacity:0.3;}
+}
+
+/* MAIN */
+
+.main{
+  max-width:1200px;
+  margin:auto;
+  padding:24px;
+}
+
+/* HEADER */
+
+.page-header{
+  margin-bottom:20px;
+}
+
+.page-title{
+  font-size:36px;
+  font-weight:800;
+}
+
+.page-title span{
+  color:var(--red);
+}
+
+.page-sub{
+  margin-top:6px;
+  color:var(--gray);
+  font-size:14px;
+}
+
+/* GRID */
+
+.two-col-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+@media(max-width:900px){
+  .two-col-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* CARD */
+
+.sec-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.sec-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:16px 20px;
+  border-bottom:1px solid #eee;
+}
+
+.sec-num{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#fee2e2;
+  color:var(--red);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:700;
+}
+
+.sec-title{
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+  color:#666;
+}
+
+.sec-body{
+  padding:20px;
+}
+
+.ctrl-sub,
+.out-sub{
+  font-size:12px;
+  color:#888;
+  margin-bottom:12px;
+  font-weight:700;
+}
+
+/* BUTTONS */
+
+.ctrl-btns{
+  display:flex;
+  gap:12px;
+}
+
+.ctrl-btn{
+  flex:1;
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.ctrl-btn:hover{
+  transform:translateY(-2px);
+}
+
+.ctrl-btn:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btn-forward{
+  background:var(--green);
+}
+
+.btn-reverse{
+  background:var(--blue);
+}
+
+.btn-stop{
+  background:var(--red);
+}
+
+.active-btn{
+  box-shadow:0 0 0 3px rgba(255,255,255,0.4) inset;
+}
+
+/* MODE BAR */
+
+.mode-bar{
+  margin-top:14px;
+  background:#f5f5f5;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
+  color:#555;
+}
+
+/* COIL STATUS */
+
+.coil-status-row{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+}
+
+.coil-item{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--light);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+}
+
+.coil-dot,
+.inp-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+}
+
+.coil-dot.on,
+.inp-dot.on{
+  background:var(--green);
+  box-shadow:0 0 10px rgba(22,163,74,0.6);
+}
+
+.coil-dot.off,
+.inp-dot.off{
+  background:var(--red);
+  box-shadow:0 0 10px rgba(230,0,0,0.4);
+}
+
+.coil-label,
+.inp-label{
+  font-size:11px;
+  color:#777;
+}
+
+.coil-state,
+.inp-state{
+  font-size:12px;
+  font-weight:700;
+}
+
+.coil-state.on,
+.inp-state.on{
+  color:var(--green);
+}
+
+.coil-state.off,
+.inp-state.off{
+  color:var(--red);
+}
+
+/* INPUT GRID */
+
+.input-status-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.inp-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--light);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:#111;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:12px;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.3s;
+}
+
+.toast.show{
+  opacity:1;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  padding:24px;
+  font-size:12px;
+  color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <div class="nav-inner">
+
+    <div class="logo">
+      Cloud<span>SCADA</span>
+    </div>
+
+    <div class="device-pill" id="sys-pill">
+      <div class="pulse"></div>
+      <span>SYSTEM ACTIVE</span>
+    </div>
+
+  </div>
+
+</nav>
+
+<!-- MAIN -->
+
+<div class="main">
+
+  <div class="page-header">
+
+    <div class="page-title">
+      Gate Control <span>Dashboard</span>
+    </div>
+
+    <div class="page-sub">
+      Real-time PLC monitoring — Alphatech Solutions
+    </div>
+
+  </div>
+
+  <div class="two-col-grid">
+
+    <!-- CONTROL -->
+
+    <div class="sec-card">
+
+      <div class="sec-header">
+        <div class="sec-num">1</div>
+        <div class="sec-title">Control Operations</div>
+      </div>
+
+      <div class="sec-body">
+
+        <div class="ctrl-sub">
+          Motor Control Operation
+        </div>
+
+        <div class="ctrl-btns">
+
+          <button
+            class="ctrl-btn btn-forward"
+            id="btn-m1"
+            onclick="sendMotorCmd('FORWARD')"
+          >
+            FORWARD
+          </button>
+
+          <button
+            class="ctrl-btn btn-reverse"
+            id="btn-m2"
+            onclick="sendMotorCmd('REVERSE')"
+          >
+            REVERSE
+          </button>
+
+          <button
+            class="ctrl-btn btn-stop"
+            id="btn-m3"
+            onclick="sendMotorCmd('STOP')"
+          >
+            STOP
+          </button>
+
+        </div>
+
+        <div class="mode-bar" id="mode-bar">
+          ● SYSTEM IDLE
+        </div>
+
+        <!-- COIL STATUS -->
+
+        <div class="ctrl-sub" style="margin-top:16px;">
+          Output Coil Status
+        </div>
+
+        <div class="coil-status-row">
+
+          <div class="coil-item">
+
+            <div class="coil-dot off" id="dot-q1"></div>
+
+            <div>
+              <div class="coil-label">
+                Q1 - Forward
+              </div>
+
+              <div class="coil-state off" id="state-q1">
+                OFF
+              </div>
+            </div>
+
+          </div>
+
+          <div class="coil-item">
+
+            <div class="coil-dot off" id="dot-q2"></div>
+
+            <div>
+              <div class="coil-label">
+                Q2 - Reverse
+              </div>
+
+              <div class="coil-state off" id="state-q2">
+                OFF
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- INPUT STATUS -->
+
+    <div class="sec-card">
+
+      <div class="sec-header">
+        <div class="sec-num">2</div>
+        <div class="sec-title">Input Status</div>
+      </div>
+
+      <div class="sec-body">
+
+        <div class="out-sub">
+          Status of Input Indications
+        </div>
+
+        <div class="input-status-grid">
+
+          <div class="inp-item">
+            <div class="inp-dot off" id="dot-i4"></div>
+
+            <div>
+              <div class="inp-label">I4</div>
+              <div class="inp-state off" id="state-i4">
+                OFF
+              </div>
+            </div>
+          </div>
+
+          <div class="inp-item">
+            <div class="inp-dot off" id="dot-i5"></div>
+
+            <div>
+              <div class="inp-label">I5</div>
+              <div class="inp-state off" id="state-i5">
+                OFF
+              </div>
+            </div>
+          </div>
+
+          <div class="inp-item">
+            <div class="inp-dot off" id="dot-i6"></div>
+
+            <div>
+              <div class="inp-label">I6</div>
+              <div class="inp-state off" id="state-i6">
+                OFF
+              </div>
+            </div>
+          </div>
+
+          <div class="inp-item">
+            <div class="inp-dot off" id="dot-i7"></div>
+
+            <div>
+              <div class="inp-label">I7</div>
+              <div class="inp-state off" id="state-i7">
+                OFF
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  CloudSCADA © 2026 Alphatech Solutions
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+
+/* AWS API */
+
+const READ_API =
+'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc?thing_name=AWSLogo';
+
+const WRITE_API =
+'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc';
+
+/* ADDRESS MAP */
+
+const ADDR_FORWARD = 8257;
+
+const ADDR_REVERSE = 8258;
+
+const ADDR_STOP = 8259;
+
+/* TOAST */
+
+function showToast(msg,isErr){
+
+  var t=document.getElementById('toast');
+
+  document.getElementById('toast-msg').textContent=msg;
+
+  t.style.background=isErr?'#b91c1c':'#111';
+
+  t.classList.add('show');
+
+  clearTimeout(t._t);
+
+  t._t=setTimeout(function(){
+    t.classList.remove('show');
+  },2500);
+}
+
+/* INPUT DOT */
+
+function updateInputDot(id,isOn){
+
+  var dot=document.getElementById('dot-'+id);
+
+  var st=document.getElementById('state-'+id);
+
+  if(!dot || !st) return;
+
+  dot.className='inp-dot '+(isOn?'on':'off');
+
+  st.className='inp-state '+(isOn?'on':'off');
+
+  st.textContent=isOn?'ON':'OFF';
+}
+
+/* COIL DOT */
+
+function updateCoilDot(id,isOn){
+
+  var dot=document.getElementById('dot-'+id);
+
+  var st=document.getElementById('state-'+id);
+
+  if(!dot || !st) return;
+
+  dot.className='coil-dot '+(isOn?'on':'off');
+
+  st.className='coil-state '+(isOn?'on':'off');
+
+  st.textContent=isOn?'ON':'OFF';
+}
+
+/* BUTTON STATE */
+
+var motorState='IDLE';
+
+function applyButtonState(state){
+
+  var bm1=document.getElementById('btn-m1');
+
+  var bm2=document.getElementById('btn-m2');
+
+  var bm3=document.getElementById('btn-m3');
+
+  bm1.disabled=false;
+  bm2.disabled=false;
+  bm3.disabled=false;
+
+  bm1.classList.remove('active-btn');
+  bm2.classList.remove('active-btn');
+
+  if(state==='FORWARD'){
+
+    bm2.disabled=true;
+
+    bm1.classList.add('active-btn');
+
+    document.getElementById('mode-bar').textContent =
+    '● MOTOR FORWARD RUNNING';
+
+  }else if(state==='REVERSE'){
+
+    bm1.disabled=true;
+
+    bm2.classList.add('active-btn');
+
+    document.getElementById('mode-bar').textContent =
+    '● MOTOR REVERSE RUNNING';
+
+  }else{
+
+    bm3.disabled=true;
+
+    document.getElementById('mode-bar').textContent =
+    '● SYSTEM IDLE';
+  }
+}
+
+/* LOAD DATA */
+
+async function loadData(){
+
+  try{
+
+    const res = await fetch(READ_API);
+
+    const json = await res.json();
+
+    var items = json.data || [];
+
+    items.forEach(function(item){
+
+      var addr = String(item.address);
+
+      var val = parseInt(item.value);
+
+      /* INPUTS */
+
+      if(addr==='4'){
+        updateInputDot('i4',!!val);
+      }
+
+      if(addr==='5'){
+        updateInputDot('i5',!!val);
+      }
+
+      if(addr==='6'){
+        updateInputDot('i6',!!val);
+      }
+
+      if(addr==='7'){
+        updateInputDot('i7',!!val);
+      }
+
+      /* OUTPUTS */
+
+      if(addr==='8193'){
+
+        updateCoilDot('q1',!!val);
+
+        if(val===1){
+
+          motorState='FORWARD';
+
+          applyButtonState('FORWARD');
+        }
+      }
+
+      if(addr==='8194'){
+
+        updateCoilDot('q2',!!val);
+
+        if(val===1){
+
+          motorState='REVERSE';
+
+          applyButtonState('REVERSE');
+        }
+      }
+
+    });
+
+  }catch(e){
+
+    console.error(e);
+
+    showToast('PLC Read Failed',true);
+  }
+}
+
+/* SEND MOTOR COMMAND */
+
+async function sendMotorCmd(cmd){
+
+  var bm1=document.getElementById('btn-m1');
+
+  var bm2=document.getElementById('btn-m2');
+
+  var bm3=document.getElementById('btn-m3');
+
+  bm1.disabled=true;
+  bm2.disabled=true;
+  bm3.disabled=true;
+
+  try{
+
+    let address = ADDR_FORWARD;
+
+    if(cmd==='FORWARD'){
+
+      address = ADDR_FORWARD;
+    }
+
+    else if(cmd==='REVERSE'){
+
+      address = ADDR_REVERSE;
+    }
+
+    else{
+
+      address = ADDR_STOP;
+    }
+
+    const res = await fetch(WRITE_API,{
+
+      method:'POST',
+
+      headers:{
+        'Content-Type':'application/json'
+      },
+
+      body:JSON.stringify({
+
+        thing_name:'AWSLogo',
+
+        address:address,
+
+        value:1
+      })
+    });
+
+    if(!res.ok){
+
+      const txt = await res.text();
+
+      throw new Error(txt);
+    }
+
+    const json = await res.json();
+
+    console.log(json);
+
+    showToast(cmd+' command sent ✓',false);
+
+    if(cmd==='FORWARD'){
+
+      motorState='FORWARD';
+
+      applyButtonState('FORWARD');
+    }
+
+    else if(cmd==='REVERSE'){
+
+      motorState='REVERSE';
+
+      applyButtonState('REVERSE');
+    }
+
+    else{
+
+      motorState='IDLE';
+
+      applyButtonState('IDLE');
+    }
+
+    /* AUTO RESET */
+
+    setTimeout(async function(){
+
+      try{
+
+        await fetch(WRITE_API,{
+
+          method:'POST',
+
+          headers:{
+            'Content-Type':'application/json'
+          },
+
+          body:JSON.stringify({
+
+            thing_name:'AWSLogo',
+
+            address:address,
+
+            value:0
+          })
+        });
+
+        loadData();
+
+      }catch(e2){
+
+        console.error(e2);
+      }
+
+    },2000);
+
+  }catch(e){
+
+    console.error(e);
+
+    showToast('Write failed: '+e.message,true);
+
+    applyButtonState('IDLE');
+  }
+}
+
+/* INIT */
+
+setInterval(loadData,2000);
+
+loadData();
+
+applyButtonState('IDLE');
+
+</script>
+
+</body>
+</html>
