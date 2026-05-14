@@ -21,6 +21,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 :root{
   --red:#e60000;
   --green:#16a34a;
+  --yellow:#d97706;
   --blue:#2563eb;
   --dark:#0d0d0d;
   --gray:#6b7280;
@@ -81,13 +82,20 @@ body{
   border:1px solid #bbf7d0;
   font-size:12px;
   font-weight:700;
+  transition:0.3s;
+}
+
+.device-pill.offline{
+  background:#fef2f2;
+  color:var(--red);
+  border-color:#fecaca;
 }
 
 .pulse{
   width:8px;
   height:8px;
   border-radius:50%;
-  background:var(--green);
+  background:currentColor;
   animation:pulse 2s infinite;
 }
 
@@ -123,6 +131,21 @@ body{
   margin-top:6px;
   color:var(--gray);
   font-size:14px;
+}
+
+/* ROLE NOTICE */
+
+.role-notice{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fffbeb;
+  border:1px solid #fde68a;
+  border-radius:12px;
+  padding:12px 16px;
+  font-size:13px;
+  color:#92400e;
+  margin-bottom:16px;
 }
 
 /* GRID */
@@ -186,6 +209,8 @@ body{
   color:#888;
   margin-bottom:12px;
   font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
 }
 
 /* BUTTONS */
@@ -199,30 +224,34 @@ body{
   flex:1;
   border:none;
   border-radius:12px;
-  padding:16px;
+  padding:18px 10px;
   color:#fff;
   font-size:14px;
   font-weight:700;
   cursor:pointer;
   transition:0.2s;
+  letter-spacing:0.03em;
 }
 
-.ctrl-btn:hover{
+.ctrl-btn:hover:not(:disabled){
   transform:translateY(-2px);
+  filter:brightness(1.08);
 }
 
 .ctrl-btn:disabled{
-  opacity:0.5;
+  opacity:0.45;
   cursor:not-allowed;
   transform:none;
 }
 
+/* Forward = Green, Reverse = Yellow, Stop = Red */
 .btn-forward{
   background:var(--green);
 }
 
 .btn-reverse{
-  background:var(--blue);
+  background:#eab308;
+  color:#fff;
 }
 
 .btn-stop{
@@ -230,7 +259,8 @@ body{
 }
 
 .active-btn{
-  box-shadow:0 0 0 3px rgba(255,255,255,0.4) inset;
+  box-shadow:0 0 0 3px rgba(255,255,255,0.35) inset,
+             0 4px 14px rgba(0,0,0,0.25);
 }
 
 /* MODE BAR */
@@ -240,14 +270,15 @@ body{
   background:#f5f5f5;
   border:1px solid var(--border);
   border-radius:10px;
-  padding:12px;
+  padding:14px 16px;
   text-align:center;
   font-size:13px;
   font-weight:700;
   color:#555;
+  letter-spacing:0.02em;
 }
 
-/* COIL STATUS */
+/* ── OUTPUT COIL STATUS — LARGER ── */
 
 .coil-status-row{
   display:flex;
@@ -259,70 +290,137 @@ body{
   flex:1;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:16px;
   background:var(--light);
   border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
+  border-radius:16px;
+  padding:22px 18px;
 }
 
-.coil-dot,
-.inp-dot{
-  width:14px;
-  height:14px;
+.coil-dot{
+  width:36px;
+  height:36px;
   border-radius:50%;
+  flex-shrink:0;
+  transition:background 0.3s;
 }
 
-.coil-dot.on,
-.inp-dot.on{
+.coil-dot.on{
   background:var(--green);
-  box-shadow:0 0 10px rgba(22,163,74,0.6);
+  box-shadow:0 0 16px rgba(22,163,74,0.8);
+  animation:coil-blink 0.9s ease-in-out infinite;
 }
 
-.coil-dot.off,
-.inp-dot.off{
-  background:var(--red);
-  box-shadow:0 0 10px rgba(230,0,0,0.4);
+.coil-dot.off{
+  background:#d1d5db;
+  box-shadow:none;
+  animation:none;
 }
 
-.coil-label,
-.inp-label{
-  font-size:11px;
+@keyframes coil-blink{
+  0%,100%{ opacity:1; box-shadow:0 0 16px rgba(22,163,74,0.85); }
+  50%    { opacity:0.25; box-shadow:none; }
+}
+
+.coil-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.coil-label{
+  font-size:13px;
   color:#777;
+  font-weight:600;
 }
 
-.coil-state,
-.inp-state{
-  font-size:12px;
-  font-weight:700;
+.coil-state{
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:0.06em;
 }
 
-.coil-state.on,
-.inp-state.on{
+.coil-state.on{
   color:var(--green);
 }
 
-.coil-state.off,
-.inp-state.off{
-  color:var(--red);
+.coil-state.off{
+  color:#9ca3af;
 }
 
-/* INPUT GRID */
+.logo{
+  font-size:22px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo-img{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+}
+
+/* ── INPUT STATUS GRID — LARGER ── */
 
 .input-status-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:12px;
 }
 
 .inp-item{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:14px;
   background:var(--light);
   border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
+  border-radius:14px;
+  padding:20px 16px;
+}
+
+.inp-dot{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.inp-dot.on{
+  background:var(--green);
+  box-shadow:0 0 12px rgba(22,163,74,0.7);
+}
+
+.inp-dot.off{
+  background:#d1d5db;
+  box-shadow:none;
+}
+
+.inp-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.inp-label{
+  font-size:13px;
+  color:#555;
+  font-weight:700;
+}
+
+.inp-state{
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:0.04em;
+}
+
+.inp-state.on{
+  color:var(--green);
+}
+
+.inp-state.off{
+  color:#9ca3af;
 }
 
 /* TOAST */
@@ -339,6 +437,7 @@ body{
   opacity:0;
   pointer-events:none;
   transition:0.3s;
+  z-index:9999;
 }
 
 .toast.show{
@@ -367,8 +466,9 @@ body{
   <div class="nav-inner">
 
     <div class="logo">
-      Cloud<span>SCADA</span>
-    </div>
+  <img src="logo.png" alt="Logo" class="logo-img">
+  Cloud<span>SCADA</span>
+</div>
 
     <div class="device-pill" id="sys-pill">
       <div class="pulse"></div>
@@ -384,185 +484,131 @@ body{
 <div class="main">
 
   <div class="page-header">
-
-    <div class="page-title">
-      Gate Control <span>Dashboard</span>
-    </div>
-
-    <div class="page-sub">
-      Real-time PLC monitoring — Alphatech Solutions
-    </div>
-
+    <div class="page-title">Gate Control <span>Dashboard</span></div>
+    <div class="page-sub">Real-time PLC monitoring &mdash; Alphatech Solutions</div>
   </div>
 
   <div class="two-col-grid">
 
-    <!-- CONTROL -->
-
+    <!-- ── 1. CONTROL OPERATIONS ── -->
     <div class="sec-card">
 
       <div class="sec-header">
         <div class="sec-num">1</div>
-        <div class="sec-title">Control Operations</div>
+        <span class="sec-title">Control Operations</span>
       </div>
 
       <div class="sec-body">
 
-        <div class="ctrl-sub">
-          Motor Control Operation
-        </div>
+        <div class="ctrl-sub">Motor Control Operation</div>
 
         <div class="ctrl-btns">
 
-          <button
-            class="ctrl-btn btn-forward"
-            id="btn-m1"
-            onclick="sendMotorCmd('FORWARD')"
-          >
-            FORWARD
+          <button class="ctrl-btn btn-forward" id="btn-m1"
+            onclick="sendMotorCmd('FORWARD')">
+            &#9654; FORWARD
           </button>
 
-          <button
-            class="ctrl-btn btn-reverse"
-            id="btn-m2"
-            onclick="sendMotorCmd('REVERSE')"
-          >
-            REVERSE
+          <button class="ctrl-btn btn-reverse" id="btn-m2"
+            onclick="sendMotorCmd('REVERSE')">
+            &#9664; REVERSE
           </button>
 
-          <button
-            class="ctrl-btn btn-stop"
-            id="btn-m3"
-            onclick="sendMotorCmd('STOP')"
-          >
-            STOP
+          <button class="ctrl-btn btn-stop" id="btn-m3"
+            onclick="sendMotorCmd('STOP')">
+            &#9646;&#9646; STOP
           </button>
 
         </div>
 
         <div class="mode-bar" id="mode-bar">
-          ● SYSTEM IDLE
+          &#9679; SYSTEM IDLE
         </div>
 
-        <!-- COIL STATUS -->
+        <!-- OUTPUT COIL STATUS -->
 
-        <div class="ctrl-sub" style="margin-top:16px;">
-          Output Coil Status
-        </div>
+        <div class="ctrl-sub" style="margin-top:18px;">Output Coil Status</div>
 
         <div class="coil-status-row">
 
           <div class="coil-item">
-
             <div class="coil-dot off" id="dot-q1"></div>
-
-            <div>
-              <div class="coil-label">
-                Q1 - Forward
-              </div>
-
-              <div class="coil-state off" id="state-q1">
-                OFF
-              </div>
+            <div class="coil-info">
+              <span class="coil-label">Q1 &ndash; Forward</span>
+              <span class="coil-state off" id="state-q1">OFF</span>
             </div>
-
           </div>
 
           <div class="coil-item">
-
             <div class="coil-dot off" id="dot-q2"></div>
-
-            <div>
-              <div class="coil-label">
-                Q2 - Reverse
-              </div>
-
-              <div class="coil-state off" id="state-q2">
-                OFF
-              </div>
+            <div class="coil-info">
+              <span class="coil-label">Q2 &ndash; Reverse</span>
+              <span class="coil-state off" id="state-q2">OFF</span>
             </div>
-
           </div>
 
         </div>
 
       </div>
-
     </div>
 
-    <!-- INPUT STATUS -->
-
+    <!-- ── 2. INPUT STATUS INDICATIONS ── -->
     <div class="sec-card">
 
       <div class="sec-header">
         <div class="sec-num">2</div>
-        <div class="sec-title">Input Status</div>
+        <span class="sec-title">Input Status Indications</span>
       </div>
 
       <div class="sec-body">
 
-        <div class="out-sub">
-          Status of Input Indications
-        </div>
+        <div class="out-sub">Status of the Input Indication</div>
 
         <div class="input-status-grid">
 
           <div class="inp-item">
             <div class="inp-dot off" id="dot-i4"></div>
-
-            <div>
-              <div class="inp-label">I4</div>
-              <div class="inp-state off" id="state-i4">
-                OFF
-              </div>
+            <div class="inp-info">
+              <span class="inp-label">I4</span>
+              <span class="inp-state off" id="state-i4">OFF</span>
             </div>
           </div>
 
           <div class="inp-item">
             <div class="inp-dot off" id="dot-i5"></div>
-
-            <div>
-              <div class="inp-label">I5</div>
-              <div class="inp-state off" id="state-i5">
-                OFF
-              </div>
+            <div class="inp-info">
+              <span class="inp-label">I5</span>
+              <span class="inp-state off" id="state-i5">OFF</span>
             </div>
           </div>
 
           <div class="inp-item">
             <div class="inp-dot off" id="dot-i6"></div>
-
-            <div>
-              <div class="inp-label">I6</div>
-              <div class="inp-state off" id="state-i6">
-                OFF
-              </div>
+            <div class="inp-info">
+              <span class="inp-label">I6</span>
+              <span class="inp-state off" id="state-i6">OFF</span>
             </div>
           </div>
 
           <div class="inp-item">
             <div class="inp-dot off" id="dot-i7"></div>
-
-            <div>
-              <div class="inp-label">I7</div>
-              <div class="inp-state off" id="state-i7">
-                OFF
-              </div>
+            <div class="inp-info">
+              <span class="inp-label">I7</span>
+              <span class="inp-state off" id="state-i7">OFF</span>
             </div>
           </div>
 
         </div>
 
       </div>
-
     </div>
 
-  </div>
+  </div><!-- /two-col-grid -->
 
-</div>
+</div><!-- /main -->
 
 <div class="footer">
-  CloudSCADA © 2026 Alphatech Solutions
+  CloudSCADA &copy; 2026 Alphatech Solutions
 </div>
 
 <div class="toast" id="toast">
@@ -571,328 +617,204 @@ body{
 
 <script>
 
-/* AWS API */
+/* ─── AWS API ─── */
+const READ_API  = 'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc?thing_name=AWSLogo';
+const WRITE_API = 'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc';
 
-const READ_API =
-'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc?thing_name=AWSLogo';
-
-const WRITE_API =
-'https://t023maw1ba.execute-api.ap-south-1.amazonaws.com/prod/plc';
-
-/* ADDRESS MAP */
-
+/* ─── Address map ─── */
 const ADDR_FORWARD = 8257;
-
 const ADDR_REVERSE = 8258;
+const ADDR_STOP    = 8259;
 
-const ADDR_STOP = 8259;
+/* ─── Motor state ─── */
+var motorState = 'IDLE';
 
-/* TOAST */
-
-function showToast(msg,isErr){
-
-  var t=document.getElementById('toast');
-
-  document.getElementById('toast-msg').textContent=msg;
-
-  t.style.background=isErr?'#b91c1c':'#111';
-
+/* ─── Toast ─── */
+function showToast(msg, isErr){
+  var t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.background = isErr ? '#b91c1c' : '#111';
   t.classList.add('show');
-
   clearTimeout(t._t);
-
-  t._t=setTimeout(function(){
-    t.classList.remove('show');
-  },2500);
+  t._t = setTimeout(function(){ t.classList.remove('show'); }, 2500);
 }
 
-/* INPUT DOT */
-
-function updateInputDot(id,isOn){
-
-  var dot=document.getElementById('dot-'+id);
-
-  var st=document.getElementById('state-'+id);
-
-  if(!dot || !st) return;
-
-  dot.className='inp-dot '+(isOn?'on':'off');
-
-  st.className='inp-state '+(isOn?'on':'off');
-
-  st.textContent=isOn?'ON':'OFF';
-}
-
-/* COIL DOT */
-
-function updateCoilDot(id,isOn){
-
-  var dot=document.getElementById('dot-'+id);
-
-  var st=document.getElementById('state-'+id);
-
-  if(!dot || !st) return;
-
-  dot.className='coil-dot '+(isOn?'on':'off');
-
-  st.className='coil-state '+(isOn?'on':'off');
-
-  st.textContent=isOn?'ON':'OFF';
-}
-
-/* BUTTON STATE */
-
-var motorState='IDLE';
-
-function applyButtonState(state){
-
-  var bm1=document.getElementById('btn-m1');
-
-  var bm2=document.getElementById('btn-m2');
-
-  var bm3=document.getElementById('btn-m3');
-
-  bm1.disabled=false;
-  bm2.disabled=false;
-  bm3.disabled=false;
-
-  bm1.classList.remove('active-btn');
-  bm2.classList.remove('active-btn');
-
-  if(state==='FORWARD'){
-
-    bm2.disabled=true;
-
-    bm1.classList.add('active-btn');
-
-    document.getElementById('mode-bar').textContent =
-    '● MOTOR FORWARD RUNNING';
-
-  }else if(state==='REVERSE'){
-
-    bm1.disabled=true;
-
-    bm2.classList.add('active-btn');
-
-    document.getElementById('mode-bar').textContent =
-    '● MOTOR REVERSE RUNNING';
-
-  }else{
-
-    bm3.disabled=true;
-
-    document.getElementById('mode-bar').textContent =
-    '● SYSTEM IDLE';
+/* ─── System pill ─── */
+function setPill(online){
+  var p = document.getElementById('sys-pill');
+  if(!p) return;
+  if(online){
+    p.className = 'device-pill';
+    p.querySelector('span').textContent = 'SYSTEM ACTIVE';
+  } else {
+    p.className = 'device-pill offline';
+    p.querySelector('span').textContent = 'OFFLINE';
   }
 }
 
-/* LOAD DATA */
+/* ─── Update input dot ─── */
+function updateInputDot(id, isOn){
+  var dot = document.getElementById('dot-' + id);
+  var st  = document.getElementById('state-' + id);
+  if(!dot || !st) return;
+  dot.className = 'inp-dot '  + (isOn ? 'on' : 'off');
+  st.className  = 'inp-state ' + (isOn ? 'on' : 'off');
+  st.textContent = isOn ? 'ON' : 'OFF';
+}
 
+/* ─── Update coil dot + sync motor state from PLC poll ─── */
+function updateCoilDot(id, isOn){
+  var dot = document.getElementById('dot-' + id);
+  var st  = document.getElementById('state-' + id);
+  if(!dot || !st) return;
+  dot.className  = 'coil-dot '  + (isOn ? 'on' : 'off');
+  st.className   = 'coil-state ' + (isOn ? 'on' : 'off');
+  st.textContent = isOn ? 'ON' : 'OFF';
+
+  /* Sync button state from PLC truth */
+  if(id === 'q1' && isOn)  { motorState = 'FORWARD'; applyButtonState('FORWARD'); }
+  else if(id === 'q2' && isOn) { motorState = 'REVERSE'; applyButtonState('REVERSE'); }
+  else if(id === 'q1' && !isOn && motorState === 'FORWARD') { motorState = 'IDLE'; applyButtonState('IDLE'); }
+  else if(id === 'q2' && !isOn && motorState === 'REVERSE') { motorState = 'IDLE'; applyButtonState('IDLE'); }
+}
+
+/* ─── Button state ───────────────────────────────────────────────
+   IDLE/STOP  → Forward & Reverse enabled,  Stop DISABLED
+   FORWARD    → Forward active, Reverse disabled, Stop enabled
+   REVERSE    → Reverse active, Forward disabled, Stop enabled
+─────────────────────────────────────────────────────────────────*/
+function applyButtonState(state){
+  var bm1 = document.getElementById('btn-m1');
+  var bm2 = document.getElementById('btn-m2');
+  var bm3 = document.getElementById('btn-m3');
+  if(!bm1 || !bm2 || !bm3) return;
+
+  /* Reset */
+  bm1.disabled = false; bm1.classList.remove('active-btn');
+  bm2.disabled = false; bm2.classList.remove('active-btn');
+  bm3.disabled = false; bm3.classList.remove('active-btn');
+
+  var bar = document.getElementById('mode-bar');
+
+  if(state === 'FORWARD'){
+    bm2.disabled = true;
+    bm1.classList.add('active-btn');
+    if(bar) bar.textContent = '\u2B24  Motor FORWARD (M1) \u2013 running';
+  } else if(state === 'REVERSE'){
+    bm1.disabled = true;
+    bm2.classList.add('active-btn');
+    if(bar) bar.textContent = '\u2B24  Motor REVERSE (M2) \u2013 running';
+  } else {
+    /* IDLE — Stop disabled */
+    bm3.disabled = true;
+    if(bar) bar.textContent = '\u25CF  SYSTEM IDLE';
+  }
+}
+
+/* ─── Poll PLC every 2 s ─── */
 async function loadData(){
-
-  try{
-
-    const res = await fetch(READ_API);
-
+  try {
+    const res  = await fetch(READ_API);
     const json = await res.json();
 
-    var items = json.data || [];
+    var raw   = json.data;
+    var items = Array.isArray(raw) ? raw
+              : (raw && Array.isArray(raw.data)) ? raw.data : [];
 
     items.forEach(function(item){
-
       var addr = String(item.address);
+      var val  = parseInt(item.value);
 
-      var val = parseInt(item.value);
+      /* Discrete Inputs */
+      if(addr === '4') { updateInputDot('i4', !!val); return; }
+      if(addr === '5') { updateInputDot('i5', !!val); return; }
+      if(addr === '6') { updateInputDot('i6', !!val); return; }
+      if(addr === '7') { updateInputDot('i7', !!val); return; }
 
-      /* INPUTS */
-
-      if(addr==='4'){
-        updateInputDot('i4',!!val);
-      }
-
-      if(addr==='5'){
-        updateInputDot('i5',!!val);
-      }
-
-      if(addr==='6'){
-        updateInputDot('i6',!!val);
-      }
-
-      if(addr==='7'){
-        updateInputDot('i7',!!val);
-      }
-
-      /* OUTPUTS */
-
-      if(addr==='8193'){
-
-        updateCoilDot('q1',!!val);
-
-        if(val===1){
-
-          motorState='FORWARD';
-
-          applyButtonState('FORWARD');
-        }
-      }
-
-      if(addr==='8194'){
-
-        updateCoilDot('q2',!!val);
-
-        if(val===1){
-
-          motorState='REVERSE';
-
-          applyButtonState('REVERSE');
-        }
-      }
-
+      /* Output Coils */
+      if(addr === '8193') { updateCoilDot('q1', !!val); return; }
+      if(addr === '8194') { updateCoilDot('q2', !!val); return; }
     });
 
-  }catch(e){
+    setPill(true);
 
+  } catch(e){
     console.error(e);
-
-    showToast('PLC Read Failed',true);
+    setPill(false);
   }
 }
 
-/* SEND MOTOR COMMAND */
-
+/* ─── Send motor command ─────────────────────────────────────────
+   Writes value 1 to PLC address for the command, then after 1.5 s
+   auto-resets the same address to 0 (pulse behaviour).
+─────────────────────────────────────────────────────────────────*/
 async function sendMotorCmd(cmd){
+  var bm1 = document.getElementById('btn-m1');
+  var bm2 = document.getElementById('btn-m2');
+  var bm3 = document.getElementById('btn-m3');
 
-  var bm1=document.getElementById('btn-m1');
+  /* Disable all during write */
+  bm1.disabled = true;
+  bm2.disabled = true;
+  bm3.disabled = true;
 
-  var bm2=document.getElementById('btn-m2');
+  var address = (cmd === 'FORWARD') ? ADDR_FORWARD
+              : (cmd === 'REVERSE') ? ADDR_REVERSE
+              : ADDR_STOP;
 
-  var bm3=document.getElementById('btn-m3');
-
-  bm1.disabled=true;
-  bm2.disabled=true;
-  bm3.disabled=true;
-
-  try{
-
-    let address = ADDR_FORWARD;
-
-    if(cmd==='FORWARD'){
-
-      address = ADDR_FORWARD;
-    }
-
-    else if(cmd==='REVERSE'){
-
-      address = ADDR_REVERSE;
-    }
-
-    else{
-
-      address = ADDR_STOP;
-    }
-
-    const res = await fetch(WRITE_API,{
-
-      method:'POST',
-
-      headers:{
-        'Content-Type':'application/json'
-      },
-
-      body:JSON.stringify({
-
-        thing_name:'AWSLogo',
-
-        address:address,
-
-        value:1
-      })
+  try {
+    await fetch(WRITE_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ thing_name: 'AWSLogo', address: address, value: 1 })
     });
 
-    if(!res.ok){
+    showToast(cmd + ' command sent \u2713 (auto-reset in 1.5s)', false);
 
-      const txt = await res.text();
-
-      throw new Error(txt);
-    }
-
-    const json = await res.json();
-
-    console.log(json);
-
-    showToast(cmd+' command sent ✓',false);
-
-    if(cmd==='FORWARD'){
-
-      motorState='FORWARD';
-
+    /* Immediate UI update */
+    if(cmd === 'FORWARD'){
+      motorState = 'FORWARD';
       applyButtonState('FORWARD');
-    }
-
-    else if(cmd==='REVERSE'){
-
-      motorState='REVERSE';
-
+    } else if(cmd === 'REVERSE'){
+      motorState = 'REVERSE';
       applyButtonState('REVERSE');
-    }
-
-    else{
-
-      motorState='IDLE';
-
+    } else {
+      motorState = 'IDLE';
       applyButtonState('IDLE');
+      updateCoilDot('q1', false);
+      updateCoilDot('q2', false);
     }
 
-    /* AUTO RESET */
-
+    /* Auto-reset pulse */
     setTimeout(async function(){
-
-      try{
-
-        await fetch(WRITE_API,{
-
-          method:'POST',
-
-          headers:{
-            'Content-Type':'application/json'
-          },
-
-          body:JSON.stringify({
-
-            thing_name:'AWSLogo',
-
-            address:address,
-
-            value:0
-          })
+      try {
+        await fetch(WRITE_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ thing_name: 'AWSLogo', address: address, value: 0 })
         });
-
+        showToast('Auto-reset sent \u2713', false);
+        motorState = 'IDLE';
+        applyButtonState('IDLE');
         loadData();
-
-      }catch(e2){
-
+      } catch(e2){
         console.error(e2);
       }
+    }, 1500);
 
-    },2000);
+    loadData();
 
-  }catch(e){
-
+  } catch(e){
     console.error(e);
-
-    showToast('Write failed: '+e.message,true);
-
-    applyButtonState('IDLE');
+    showToast('Write failed: ' + e.message, true);
+    applyButtonState(motorState);
   }
 }
 
-/* INIT */
-
-setInterval(loadData,2000);
-
+/* ─── Init ─── */
+setInterval(loadData, 2000);
 loadData();
-
-applyButtonState('IDLE');
+applyButtonState('IDLE');   /* Stop disabled at start */
 
 </script>
 
