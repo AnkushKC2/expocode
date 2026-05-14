@@ -4,7 +4,7 @@ frontend:
   phases:
     build:
       commands:
-        - echo "Static site deployment"
+        - echo "Deploying static site"
 
   artifacts:
     baseDirectory: .
